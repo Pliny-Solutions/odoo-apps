@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="rule_hr_appraisal_hr" model="ir.rule">
+        <field name="name">HR Appraisals: HR sees all, others see their own</field>
+        <field name="model_id" ref="model_hr_appraisal"/>
+        <field name="global" eval="False"/>
+        <field name="groups" eval="[(4, ref('hr_evaluation.group_appraisal_hr'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+
+		<record id="rule_hr_appraisal_employee_only" model="ir.rule">
+				<field name="name">HR Appraisals: Reviewer can only see their own</field>
+				<field name="model_id" ref="model_hr_appraisal"/>
+				<field name="domain_force">['|',('employee_id.user_id', '=', user.id), ('manager_id.user_id', '=', user.id)]</field>
+				<field name="groups" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+
+
+    <record id="hr_threesixty_plan_allocation_rule_reviewer_or_hr" model="ir.rule">
+        <field name="name">360 Plan Allocations: HR sees all, others see their own</field>
+        <field name="model_id" ref="model_hr_threesixty_plan_allocation"/>
+        <field name="global" eval="False"/>
+        <field name="groups" eval="[(4, ref('hr_evaluation.group_appraisal_hr'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="hr_threesixty_plan_review_rule_reviewer_or_hr" model="ir.rule">
+        <field name="name">360 Allocations: HR can see all</field>
+        <field name="model_id" ref="model_hr_threesixty_review_list"/>
+        <field name="global" eval="False"/>
+        <field name="groups" eval="[(4, ref('hr_evaluation.group_appraisal_hr'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+
+		<record id="rule_hr_threesixty_plan_allocation_employee_only" model="ir.rule">
+				<field name="name">360 Allocations: Reviewer can only see their own</field>
+				<field name="model_id" ref="model_hr_threesixty_plan_allocation"/>
+				<field name="domain_force">[('reviewer_id.user_id', '=', user.id)]</field>
+				<field name="groups" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+
+		<record id="rule_hr_threesixty_review_list_employee_only" model="ir.rule">
+				<field name="name">360 Review List: Reviewer can only see their own</field>
+				<field name="model_id" ref="model_hr_threesixty_review_list"/>
+				<field name="domain_force">[('reviewer_id.user_id', '=', user.id)]</field>
+				<field name="groups" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+
+
+    <record id="hr_threesixty_reviews_hr" model="ir.rule">
+        <field name="name">360 Reviews Allocations: HR sees all, others see their own</field>
+        <field name="model_id" ref="model_hr_threesixty_review"/>
+        <field name="global" eval="False"/>
+        <field name="groups" eval="[(4, ref('hr_evaluation.group_appraisal_hr'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+		<record id="hr_threesixty_reviews_employee_only" model="ir.rule">
+				<field name="name">360 Allocations: Reviewer can only see their own</field>
+				<field name="model_id" ref="model_hr_threesixty_review"/>
+				<field name="domain_force">['|',('reviewer_id.user_id', '=', user.id),('reviewed_id.user_id', '=', user.id)]</field>
+				<field name="groups" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+
+		<record id="hr_threesixty_reviewed_employee_only" model="ir.rule">
+				<field name="name">360 Allocations: One can only see their own done Reviews</field>
+				<field name="model_id" ref="model_hr_threesixty_review"/>
+				<field name="domain_force">[('state', '=', 'done')]</field>
+				<field name="groups" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+
+
+</odoo>
+
+

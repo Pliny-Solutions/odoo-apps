@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_add_employees_wizard_form" model="ir.ui.view">
+        <field name="name">Add Employees to 360 Plan</field>
+        <field name="model">hr.threesixty.add.employees.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Employees">
+                <group>
+                    <!-- Plan is set via context, so we hide it -->
+                    <field name="employee_ids" widget="many2many_checkboxes" domain="[]"/>
+                </group>
+                <footer>
+                    <button string="Add" type="object" name="action_add_employees" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_add_employees_wizard" model="ir.actions.act_window">
+        <field name="name">Add Employees</field>
+        <field name="res_model">hr.threesixty.add.employees.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_plan_id': active_id}</field>
+    </record>
+
+
+    <record id="view_add_employees_appraisal_wizard_form" model="ir.ui.view">
+        <field name="name">Add Employees to Appraisal Plan</field>
+        <field name="model">hr.appraisal.add.employees.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Employees">
+                <group>
+                    <!-- Plan is set via context, so we hide it -->
+                    <field name="employee_ids" widget="many2many_checkboxes" domain="[]"/>
+                </group>
+                <footer>
+                    <button string="Add" type="object" name="action_add_appraisal_employees" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_add_appraisal_employees_wizard" model="ir.actions.act_window">
+        <field name="name">Add Employees</field>
+        <field name="res_model">hr.appraisal.add.employees.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_plan_id': active_id}</field>
+    </record>
+
+</odoo>
+

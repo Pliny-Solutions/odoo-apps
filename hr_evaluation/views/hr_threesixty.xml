@@ -1,0 +1,154 @@
+<odoo>
+
+    <record id="view_threesixty_plan_allocation_tree" model="ir.ui.view">
+        <field name="name">hr.threesixty.plan.allocation.tree</field>
+        <field name="model">hr.threesixty.plan.allocation</field>
+        <field name="arch" type="xml">
+            <tree string="360 Plan Allocations" create="false">
+                <field name="plan_id"/>
+                <field name="reviewer_id"/>
+                <field name="number_of_reviews"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_threesixty_plan_allocation" model="ir.actions.act_window">
+        <field name="name">360 Plan Allocations</field>
+        <field name="res_model">hr.threesixty.plan.allocation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_threesixty_plan_allocation_tree"/>
+    </record>
+
+
+    <record id="view_hr_threesixty_plan_allocation_form" model="ir.ui.view">
+        <field name="name">hr.threesixty.plan.allocation</field>
+        <field name="model">hr.threesixty.plan.allocation</field>
+        <field name="arch" type="xml">
+            <form string="360 Allocation" create="false">
+                <sheet>
+                    <group>
+                        <field name="plan_id"/>
+                        <field name="reviewer_id" readonly="1"/>
+                        <field name="number_of_reviews" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Persons to Review">
+                            <field name="review_list_ids">
+                                <tree editable="bottom">
+                                    <field name="reviewed_id"/>
+                                    <field name="state" readonly="1"/>
+                                    <field name="plan_id" readonly="1"/>
+                                    <button name="action_generate_review" string="Start" type="object" icon="fa-check" invisible = "state != 'new'"/>
+                                    <button name="action_open_review" string="Continue" type="object" icon="fa-check" invisible = "state != 'active'"/>
+                                    <button name="action_open_review" string="Done" type="object" icon="fa-check" invisible = "state != 'done'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_threesixty_review_action" model="ir.actions.act_window">
+        <field name="name">360 Reviews</field>
+        <field name="res_model">hr.threesixty.review</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new 360 review.
+            </p>
+        </field>
+    </record>
+
+
+    <record id="view_hr_threesixty_review_form" model="ir.ui.view">
+        <field name="name">hr.threesixty.review</field>
+        <field name="model">hr.threesixty.review</field>
+        <field name="arch" type="xml">
+            <form string="360 Review Form" create="false">
+                <header>
+                		<field name="state" invisible="1"/>
+                		<button name="action_draft" type="object" string="Draft" invisible = "state == 'done'"/>
+										<button name="action_submit" type="object" string="Done" class="btn-primary" confirm="Are you sure you want to submit this. You cant edit after this?" invisible = "state != 'draft'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="plan_id" readonly="1"/>
+                        <field name="manager_id" readonly="1"/>
+                        <field name="submit_date" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="reviewed_id" readonly="1"/>
+                        <field name="department_id" readonly="1"/>
+                        <field name="job_id" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Review Questions">
+                            <field name="question_review_ids" readonly = "state == 'done'">
+                                <tree editable="bottom" readonly="1">
+                                    <field name="name" readonly="1"/>
+                                    <field name="description" readonly="1"/>
+                                    <field name="maximum_value" string ="Max Score" readonly="1"/>
+                                    <field name="reviewer_value" string ="My Score"/>
+                                    <field name="reviewer_comment" string ="Comments"/>
+
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+<!-- View for my 360 degrees views -->
+		<record id="view_threesixty_review_reviewed_tree" model="ir.ui.view">
+				<field name="name">hr.threesixty.review.tree.filtered</field>
+				<field name="model">hr.threesixty.review</field>
+				<field name="arch" type="xml">
+				    <tree create="false">
+				        <field name="reviewed_id"/>
+				        <field name="plan_id"/>
+				        <field name="department_id"/>
+				        <field name="job_id"/>
+				        <field name="submit_date"/>
+				        <field name="state"/>
+				    </tree>
+				</field>
+		</record>
+
+		<record id="view_threesixty_review_reviewed_filter" model="ir.ui.view">
+				<field name="name">hr.threesixty.review.search</field>
+				<field name="model">hr.threesixty.review</field>
+				<field name="arch" type="xml">
+				    <search>
+				        <filter name="my_reviews" string="My Reviews" domain="[('reviewed_id.user_id', '=', uid)]" context="{'default_filter_my_reviews': 1}"/>
+				        <field name="state"/>
+				        <field name="reviewed_id"/>
+				    </search>
+				</field>
+		</record>
+
+
+    <record id="action_hr_threesixty_review" model="ir.actions.act_window">
+        <field name="name">My 360 Reviews</field>
+        <field name="res_model">hr.threesixty.review</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_threesixty_review_reviewed_tree"/>
+				<field name="domain">
+					  <![CDATA[[('reviewed_id.user_id', '=', uid),('state', '=', 'done')]]]>
+				</field>
+    </record>
+
+    <record id="action_hr_threesixty_team_review" model="ir.actions.act_window">
+        <field name="name">My Team 360 Reviews</field>
+        <field name="res_model">hr.threesixty.review</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_threesixty_review_reviewed_tree"/>
+				<field name="domain">
+					  <![CDATA[[('manager_id.user_id', '=', uid),('state', '=', 'done')]]]>
+				</field>
+    </record>
+</odoo>
+

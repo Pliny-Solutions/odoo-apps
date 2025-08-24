@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Room Booking Tree -->
+    <record id="view_room_booking_tree" model="ir.ui.view">
+        <field name="name">room.booking.tree</field>
+        <field name="model">room.booking</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="room_id"/>
+                <field name="property_id"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Room Booking Tree -->
+    <record id="view_admin_room_booking_tree" model="ir.ui.view">
+        <field name="name">room.booking.tree</field>
+        <field name="model">room.booking</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="room_id"/>
+                <field name="property_id"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Room Booking Form -->
+    <record id="view_room_booking_form" model="ir.ui.view">
+        <field name="name">room.booking.form</field>
+        <field name="model">room.booking</field>
+        <field name="arch" type="xml">
+            <form string="Room Booking">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,checked_out"/>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary"  invisible ="state == 'confirmed' or state == 'checked_out'"/>
+                    <button name="action_check_out" string="Check Out" type="object" class="btn-success" invisible ="state == 'checked_out' or state == 'draft'"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" class="btn-secondary"
+                    		invisible ="state == 'checked_out' or state == 'draft'"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <field name="employee_id" readonly="state == 'checked_out'"/>
+                        <field name="manager_id" readonly="state == 'checked_out'"/>
+                        <field name="property_id" readonly="state == 'checked_out'"/>
+                        <field name="room_id" domain="[('property_id', '=', property_id)]" readonly="state == 'checked_out'"/>
+                    </group>
+                    <group>
+                        <field name="check_in" readonly="state == 'checked_out'"/>
+                        <field name="check_out" readonly="state == 'checked_out'"/>
+                        <field name="state" invisible="1" readonly="state == 'checked_out'"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Calendar View for Room Bookings -->
+    <record id="view_room_booking_calendar" model="ir.ui.view">
+        <field name="name">room.booking.calendar</field>
+        <field name="model">room.booking</field>
+        <field name="arch" type="xml">
+            <calendar date_start="check_in" date_stop="check_out" string="Room Bookings" color="room_id">
+                <field name="employee_id"/>
+                <field name="room_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_room_booking" model="ir.actions.act_window">
+        <field name="name">Room Bookings</field>
+        <field name="res_model">room.booking</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="view_id" ref="view_room_booking_tree"/>
+        <field name="domain">
+            <![CDATA[[('employee_id.user_id', '=', uid)]]]>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_room_admin_booking" model="ir.actions.act_window">
+        <field name="name">Room Bookings</field>
+        <field name="res_model">room.booking</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="view_id" ref="view_admin_room_booking_tree"/>
+    </record>
+    <!-- Menu -->
+
+</odoo>
+
