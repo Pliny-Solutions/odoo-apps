@@ -1,9 +1,10 @@
 {
-    'name': 'HR Appraisal and 360',
+    'name': 'HR Appraisal and 360 Reviews',
     'version': '17.0',
     'category': 'Human Resources',
     'author': 'Pliny Solutions',
     'website': 'https://plinysolutions.com/odoo',
+    'description': "Manage employee Performance evaluations, Appraisals, Appraisal, 360 degree evaluations and KPIs.",
     'sequence': 90,
     'license': 'LGPL-3',
     'images': ['static/description/cover.png'],
@@ -27,7 +28,6 @@
         'views/hr_appraisal_plan.xml',
         'views/hr_appraisal_views.xml',
     ],
-    'description': " HR Appraisals, KPI's and 360 degree feedback",
     'installable': True,
     'application': True
 }
