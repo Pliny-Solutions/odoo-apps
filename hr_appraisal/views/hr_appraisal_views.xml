@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <menuitem id="hr_appraisal_menu_root" name="Appraisal" action="hr_appraisal_action" >
+    		<!-- Short cut to allow the HR manager to see all appraisals  -->
+    		<menuitem id="hr_appraisal_all_menu" sequence="1"  name="All Appraisals"  action="hr_appraisal_hr_action" groups="hr_appraisal.group_appraisal_hr"/>
+				<menuitem id="hr_appraisal_menu" sequence="2"  name="My Appraisals"  action="hr_appraisal_action"/>
+				<menuitem id="menu_hr_appraisal_manager_review" sequence="3"  name="My Team" action="hr_appraisal_manager_review"/>
+				<menuitem id="menu_hr_threesixty_review" sequence="4"  name="360 Reviews" action="action_hr_threesixty_plan_allocation"/>
+				<menuitem id="menu_hr_threesixty_my_review" sequence="5"  name="My 360 Reviews" action="action_hr_threesixty_review"/>
+				<menuitem id="menu_hr_threesixty_team_review" sequence="6"  name="My Team 360 Reviews" action="action_hr_threesixty_team_review"/>
+        <menuitem id="hr_appraisal_configuration_level_menu"  sequence="7"  name="Configuration" groups="hr_appraisal.group_appraisal_hr">
+            <menuitem id="hr_appraisal_plan_menu_action" sequence="10" name="Appraisal Plans" action="hr_appraisal_plan_action" groups="hr_appraisal.group_appraisal_hr"/>
+            <menuitem id="hr_threesixty_plan_menu_action" sequence="11" name="360 Plans" action="hr_threesixty_plan_action" groups="hr_appraisal.group_appraisal_hr"/>
+            <menuitem id="hr_appraisal_category_menu_action" sequence="12" name="Categories"  action="hr_appraisal_category_action" groups="hr_appraisal.group_appraisal_hr"/>
+            <menuitem id="hr_appraisal_category_score_action" sequence="13" name="Score System" action="hr_appraisal_score_action" groups="hr_appraisal.group_appraisal_hr"/>
+        </menuitem>
+    </menuitem>
+
+
+</odoo>
