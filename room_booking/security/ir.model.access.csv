@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_room_property_admin,access.room.property.admin,model_room_property,room_booking.group_room_admin,1,1,1,1
-access_room_property_room_user,access.room.property.room.admin,model_room_property_room,room_booking.group_room_admin,1,1,1,1
-access_room_property_user,access.room.property.user,model_room_property,base.group_user,1,0,0,0
-access_room_property_room_admin,access.room.property.room.user,model_room_property_room,base.group_user,1,0,0,0
-access_room_booking_user,acsess.room.booking.user,model_room_booking,base.group_user,1,1,1,0
-
