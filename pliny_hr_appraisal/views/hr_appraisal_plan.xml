@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="hr_appraisal_plan_action" model="ir.actions.act_window">
+        <field name="name">Appraisal Plans</field>
+        <field name="res_model">hr.appraisal.plan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Appraisal
+          </p><p>
+           	These are used to add employees to an appraisal Period
+          </p>
+        </field>
+    </record>
+
+
+    <record id="hr_appraisal_plan_tree" model="ir.ui.view">
+        <field name="name">hr.appraisal.plan.tree</field>
+        <field name="model">hr.appraisal.plan</field>
+        <field name="arch" type="xml">
+            <tree string="Appraisal Plan" >
+              	  <field name="name"/>
+              	  <field name="start_date"/>
+              	  <field name="end_date"/>
+              	  <field name="category_id"/>
+              	  <field name="score_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_appraisal_plan_allocation_tree" model="ir.ui.view">
+        <field name="name">hr.appraisal.plan.allocation.tree</field>
+        <field name="model">hr.appraisal.plan.allocation</field>
+        <field name="arch" type="xml">
+            <tree string="Appraisal Plan Employees" >
+                <field name="employee_id"/>
+                <field name="notes"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_appraisal_plan_question_tree" model="ir.ui.view">
+        <field name="name">hr.appraisal.plan.question.tree</field>
+        <field name="model">hr.appraisal.plan.question</field>
+        <field name="arch" type="xml">
+            <tree string="Appraisal Plan Questions" >
+                <field name="name"/>
+                <field name="description"/>
+                <field name="score_id"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="hr_appraisal_category_action" model="ir.actions.act_window">
+        <field name="name">Appraisal Categories</field>
+        <field name="res_model">hr.appraisal.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Appraisal Category (Exit interview, Quarterly, Monthly, etc)
+          </p><p>
+           	These are used to add employees to an appraisal Period
+          </p>
+        </field>
+    </record>
+
+
+    <record id="hr_appraisal_score_action" model="ir.actions.act_window">
+        <field name="name">Appraisal Score</field>
+        <field name="res_model">hr.appraisal.score</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Appraisal Score System(By percentage, 5 star system etc)
+          </p><p>
+           	These are used to add employees to an appraisal Period
+          </p>
+        </field>
+    </record>
+
+    <record id="hr_appraisal__plan_view_form" model="ir.ui.view">
+        <field name="name">Appraisal Plan</field>
+        <field name="model">hr.appraisal.plan</field>
+        <field name="arch" type="xml">
+            <form string="Appraisal Plan">
+                <header>
+                     <button name="action_generate_appraisals" string="Allocate"  type="object" class="btn-primary"/>
+                     <button name="%(action_add_appraisal_employees_wizard)d" string="Add Employees" type="action" class="btn-primary" context="{'default_plan_id': active_id}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="score_id"/>
+                            <field name="category_id"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="deadline"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Default Questions">
+                            <field name="question_ids">
+                                 <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="maximum_value"/>
+                                    <field name="score_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Employee Allocations">
+                            <field name="allocation_ids">
+                                 <tree editable="bottom">
+                                    <field name="plan_id" readonly ="1"/>
+                                    <field name="employee_id" readonly ="state == 'allocated'"/>
+                                    <field name="notes" readonly ="state == 'allocated'"/>
+                                    <field name="state" readonly ="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
