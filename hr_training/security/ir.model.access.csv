@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_training_hr,hr.training.user,model_hr_training,hr_training.group_training_hr,1,1,1,1
+access_hr_training_expense_hr,hr.training.expense.user,model_hr_training_expense,hr_training.group_training_hr,1,1,1,1
+access_hr_training_trainee_hr,hr.training.trainee.user,model_hr_training_trainee,hr_training.group_training_hr,1,1,1,1
+access_hr_training_attachment_hr,hr.training.attachment.user,model_hr_training_attachment,hr_training.group_training_hr,1,1,1,1
+
+
+
+

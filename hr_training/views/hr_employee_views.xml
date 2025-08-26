@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_training_stat" model="ir.ui.view">
+        <field name="name">hr.employee.form.training.stat</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="action"
+                        name="%(hr_training.action_hr_training_trainee)d"
+                        context="{'default_employee_id': active_id}"
+                        class="oe_stat_button"
+                        icon="fa-graduation-cap"
+                        invisible ="training_count == 0">
+                    <div>
+                        <span><field name="training_count" widget="statinfo"/></span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>
