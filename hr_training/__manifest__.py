@@ -1,5 +1,5 @@
 {
-    'name': 'HR Training',
+    'name': 'HR Training and Development Programs',
     'version': '17.0',
     'category': 'Human Resources',
     'author': 'Pliny Solutions',
@@ -7,7 +7,7 @@
     'sequence': 92,
     'license': 'LGPL-3',
     'images': ['static/description/cover.png'],
-    'summary': 'Keep track of all trainings done to employees and partners',
+    'summary': 'Employee Training and Development Programs',
 
     'depends': [
     		'hr',
@@ -20,7 +20,7 @@
         'security/training_record_rules.xml',
         'security/ir.model.access.csv',
     ],
-    'description': "List of all trainings that are done by the company to both employees and other partners",
+    'description': "List of all Employee Training and Development Programs offered by the Company whether internally or using external partners",
     'installable': True,
     'application': True
 }

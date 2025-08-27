@@ -28,16 +28,6 @@
         <field name="groups" eval="[(4, ref('hr_training.group_training_hr'))]"/>
     </record>
 
-    <record id="training_expense_hr_rule" model="ir.rule">
-        <field name="name">Training: HR full access</field>
-        <field name="model_id" ref="model_hr_training_expense"/>
-        <field name="domain_force">[(1, '=', 1)]</field> <!-- Allow all -->
-        <field name="perm_read" eval="1"/>
-        <field name="perm_write" eval="1"/>
-        <field name="perm_create" eval="1"/>
-        <field name="perm_unlink" eval="1"/>
-        <field name="groups" eval="[(4, ref('hr_training.group_training_hr'))]"/>
-    </record>
 
     <record id="training_attachment_hr_rule" model="ir.rule">
         <field name="name">Training: HR full access</field>

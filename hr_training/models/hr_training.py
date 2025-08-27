@@ -3,7 +3,7 @@ from odoo.exceptions import ValidationError
 
 class Training(models.Model):
     _name = "hr.training"
-    _description = "Employee and Entrepreneur Training"
+    _description = "Employee Training and Development Programs"
 
     name = fields.Char('Name', required=True)
     description = fields.Char('Description')
@@ -13,7 +13,6 @@ class Training(models.Model):
     end_date = fields.Date(string="End Date")
     persons_trained = fields.Integer(string="Trainees No", compute='_compute_persons_trained', required=True)
     trainee_ids = fields.One2many('hr.training.trainee', 'training_id', string="Trainees")
-    expense_ids = fields.One2many('hr.training.expense', 'training_id', string="Expenses")
     attachment_ids = fields.One2many('hr.training.attachment', 'training_id', string="Attachments")
 
 
@@ -28,23 +27,15 @@ class Training(models.Model):
         string="Department"
     )
 
-    budget = fields.Monetary(
-        string="Budget",
-        currency_field='currency_id',
-        help="Budget allocation for this training"
-    )
-    amount_spent = fields.Monetary(
-        string="Amount Spent",
-        currency_field='currency_id',
-        compute='_compute_totals',
-        readonly=True,
-        help="Shows amount spent so far"
-    )
+    training_type = fields.Selection([
+        ('Internal', 'Internal'),
+        ('External', 'External'),
+        ('Other', 'Other'),
+    ], string="Training Type", default='Internal', tracking=True)
 
-    funder_id = fields.Many2one(
+    trainer_id = fields.Many2one(
         comodel_name='res.partner',
-        string='Funder',
-        domain=[('is_funder', '=', True)],
+        string='Training Partner',
     )
 
     company_id = fields.Many2one(
@@ -55,42 +46,14 @@ class Training(models.Model):
         default=lambda self: self.env.company
     )
 
-    currency_id = fields.Many2one(
-        'res.currency',
-        string='Currency',
-        required=True,
-        readonly=True,
-        default=lambda self: self.env.company.currency_id
-    )
-
-    total_reimbursement = fields.Monetary(
-        string="Total Reimbursement",
-        compute='_compute_totals',
-        store=True,
-        currency_field='currency_id'
-    )
-    total_expense = fields.Monetary(
-        string="Total Expenses",
-        compute='_compute_totals',
-        store=True,
-        currency_field='currency_id'
-    )
-
     state = fields.Selection([
         ('planned', 'Planned'),
         ('approved', 'Approved'),
-        ('ongoing', 'On Going'),
         ('done', 'Completed'),
         ('cancelled', 'Cancelled'),
         ('closed', 'Closed')
     ], string="Status", default='planned', tracking=True)
 
-    @api.depends('trainee_ids.reimbursement', 'expense_ids.expense')
-    def _compute_totals(self):
-        for rec in self:
-            rec.total_reimbursement = sum(t.reimbursement for t in rec.trainee_ids)
-            rec.total_expense = sum(e.expense for e in rec.expense_ids)
-            rec.amount_spent = rec.total_reimbursement + rec.total_expense
 
     @api.onchange('start_date')
     def _onchange_start_date(self):
@@ -112,9 +75,6 @@ class Training(models.Model):
         self._check_state_modifiable()
         self.write({'state': 'approved'})
 
-    def action_start(self):
-        self._check_state_modifiable()
-        self.write({'state': 'ongoing'})
 
     def action_complete(self):
         self._check_state_modifiable()
@@ -150,53 +110,15 @@ class TrainingTrainee(models.Model):
     _description = "List of trainees who attended a training"
 
     training_id = fields.Many2one('hr.training', string="Training")
+
     employee_id = fields.Many2one(
         'hr.employee',
         string="Trainee",
         required=True
     )
-    reimbursement = fields.Monetary(
-        string="Reimbursement",
-        currency_field='currency_id',
-        default=0,
-        help="Amount allocated to trainee as payment or reimbursement"
-    )
-    currency_id = fields.Many2one(
-        'res.currency',
-        string='Currency',
-        required=True,
-        readonly=True,
-        default=lambda self: self.env.company.currency_id
-    )
+
+
     notes = fields.Char(string="Notes")
-
-class TrainingExpense(models.Model):
-    _name = "hr.training.expense"
-    _description = "Expenses incurred during training"
-
-    training_id = fields.Many2one('hr.training', string="Training")
-    employee_id = fields.Many2one(
-        'hr.employee',
-        string="Employee",
-        required=True,
-        help="Employee responsible for the expense"
-    )
-    name = fields.Char(string="Name", required=True)
-    notes = fields.Char(string="Notes")
-    expense = fields.Monetary(
-        string="Expense",
-        currency_field='currency_id',
-        default=0,
-        help="Cost of the expense item"
-    )
-    currency_id = fields.Many2one(
-        'res.currency',
-        string='Currency',
-        required=True,
-        readonly=True,
-        default=lambda self: self.env.company.currency_id
-    )
-
 
 class HrTrainingAttachment(models.Model):
     _name = 'hr.training.attachment'

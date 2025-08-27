@@ -22,24 +22,22 @@
                 <field name="end_date"/>
                 <field name="employee_id"/>
                 <field name="persons_trained"/>
-                <field name="budget"/>
-                <field name="state"/>
-                <field name="amount_spent"/>
-                <field name="funder_id"/>
+                <field name="training_type"/>
+                <field name="trainer_id"/>
             </tree>
         </field>
     </record>
 
-		<!-- The stat button view list -->
+    <!-- The stat button view list -->
     <record id="action_hr_training_trainee" model="ir.actions.act_window">
-				<field name="name">Training Attendance</field>
-				<field name="res_model">hr.training.trainee</field>
-				<field name="view_mode">tree,form</field>
-				<field name="domain">[('employee_id', '=', context.get('search_default_employee_id'))]</field>
-		</record>
+        <field name="name">Training Attendance</field>
+        <field name="res_model">hr.training.trainee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('employee_id', '=', context.get('search_default_employee_id'))]</field>
+    </record>
 
 
-		<!-- List view by employees and the trainings they have attended -->
+    <!-- List view by employees and the trainings they have attended -->
     <record id="view_hr_training_trainee_tree_with_training_data" model="ir.ui.view">
         <field name="name">hr.training.trainee.tree.training</field>
         <field name="model">hr.training.trainee</field>
@@ -57,17 +55,64 @@
         <field name="view_id" ref="view_hr_training_trainee_tree_with_training_data"/>
     </record>
 
+    <record id="view_hr_training_trainee_tree" model="ir.ui.view">
+      <field name="name">hr.training.trainee.tree</field>
+      <field name="model">hr.training.trainee</field>
+      <field name="arch" type="xml">
+        <tree string="Trainings Attended">
+          <field name="employee_id"/>
+          <field name="training_id"/>
+          <field name="notes"/>
+        </tree>
+      </field>
+    </record>
+
+
+    <record id="view_hr_training_trainee_kanban" model="ir.ui.view">
+      <field name="name">hr.training.trainee.kanban</field>
+      <field name="model">hr.training.trainee</field>
+      <field name="arch" type="xml">
+        <kanban default_group_by="employee_id" class="o_kanban_small_column">
+          <field name="employee_id"/>
+          <field name="training_id"/>
+          <field name="notes"/>
+
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_global_click">
+                <!-- Employee avatar -->
+                <div class="o_kanban_image">
+                  <field name="employee_id" widget="many2one_avatar_user"/>
+                </div>
+
+                <!-- Training name + notes -->
+                <div class="o_kanban_details">
+                  <div>
+                    <field name="training_id"/>
+                  </div>
+                  <div>
+                    <field name="notes"/>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+
+
     <record id="view_hr_training_form" model="ir.ui.view">
         <field name="name">hr.training.form</field>
         <field name="model">hr.training</field>
         <field name="arch" type="xml">
             <form>
             <header>
-            		<button name="action_approve" string="Approve" type="object" class="btn-primary"/>
-                <button name="action_start" string="Start" type="object"  class="btn-secondary"/>
-                <button name="action_complete" string="Complete" type="object" class="btn-success"/>
-                <button name="action_cancel" string="Cancel" type="object" class="btn-danger"/>
-                <button name="action_close" string="Close" type="object" class="btn-info"/>
+                <button name="action_approve" string="Approve" type="object" class="btn-primary"/>
+                <button name="action_complete" string="Complete" type="object" class="btn-primary"  />
+                <button name="action_cancel" string="Cancel" type="object" class="btn-danger" confirm="Are you sure you want to submit this. You cant edit after this?" />
+                <button name="action_close" string="Close" type="object" class="btn-danger" confirm="Are you sure you want to submit this. You cant edit after this?" invisible = "state == 'planned'" />
                 <field name="state" widget="statusbar" statusbar_visible="planned,approved,ongoing,done,cancelled,closed"/>
             </header>
                             <sheet>
@@ -76,15 +121,12 @@
                           <field name="name"/>
                           <field name="start_date" readonly="state == 'closed' or state == 'cancelled'"/>
                           <field name="end_date" readonly="state == 'closed' or state == 'cancelled'"/>
-                          <field name="employee_id" readonly="state == 'closed' or state == 'cancelled'"/>
                           <field name="department_id" readonly="state == 'closed' or state == 'cancelled'"/>
                       </group>
                       <group>
-                          <field name="budget" readonly="state == 'closed' or state == 'cancelled'"/>
-                          <field name="amount_spent" readonly="state == 'closed' or state == 'cancelled'"/>
-                          <field name="total_reimbursement" readonly="state == 'closed' or state == 'cancelled'"/>
-                          <field name="total_expense" readonly="state == 'closed' or state == 'cancelled'"/>
-                          <field name="funder_id" readonly="state == 'closed' or state == 'cancelled'"/>
+                          <field name="training_type" readonly="state == 'closed' or state == 'cancelled'"/>
+                          <field name="trainer_id" readonly="state == 'closed' or state == 'cancelled'"/>
+                          <field name="employee_id" readonly="state == 'closed' or state == 'cancelled'"/>
                       </group>
                      </group>
                     <group>
@@ -98,17 +140,6 @@
                             <field name="trainee_ids"  readonly="state == 'closed' or state == 'cancelled'">
                                  <tree editable="bottom">
                                     <field name="employee_id"/>
-                                    <field name="reimbursement"/>
-                                    <field name="notes"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Expenses">
-                            <field name="expense_ids"  readonly="state == 'closed' or state == 'cancelled'">
-                                <tree editable="bottom">
-                                    <field name="name"/>
-                                    <field name="employee_id"/>
-                                    <field name="expense"/>
                                     <field name="notes"/>
                                 </tree>
                             </field>

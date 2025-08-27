@@ -10,7 +10,7 @@ class HREmployee(models.Model):
     )
 
     training_count = fields.Integer(
-        string='Trainings Attended',
+        string='Trainings',
         compute='_compute_training_count'
     )
 
@@ -20,4 +20,13 @@ class HREmployee(models.Model):
                 ('employee_id', '=', employee.id)
             ])
 
-
+    def action_view_trainings(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Employee Trainings',
+            'res_model': 'hr.training.trainee',
+            'view_mode': 'kanban,tree,form',
+            'domain': [('employee_id', '=', self.id)],
+            'context': {'default_employee_id': self.id},
+        }
